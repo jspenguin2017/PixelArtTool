@@ -15,3 +15,5 @@ Please open an issue if there is something you want me to know.
 
 [Trove Neutral blocks database](https://docs.google.com/spreadsheets/d/1xZHZqws1lJ9bPGUGNmrFt958TujNHdiVstCY_4dn_f4/edit#gid=0) 
 are provided by Summer Haas. 
+
+Images under `Test Images` are from Pixabay and are licensed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en). 
