@@ -13,5 +13,5 @@ Please open an issue if there is something you want me to know.
 
 ## Credits
 
-[Trove Neutral database](https://docs.google.com/spreadsheets/d/1xZHZqws1lJ9bPGUGNmrFt958TujNHdiVstCY_4dn_f4/edit#gid=0) 
+[Trove Neutral blocks database](https://docs.google.com/spreadsheets/d/1xZHZqws1lJ9bPGUGNmrFt958TujNHdiVstCY_4dn_f4/edit#gid=0) 
 are provided by Summer Haas. 
