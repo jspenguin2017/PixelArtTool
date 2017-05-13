@@ -36,7 +36,7 @@ namespace Pixel_Art_Tool
         }
 
         /// <summary>
-        /// This will hold every Block of current database
+        /// The current Block database
         /// </summary>
         public Block[] blocks;
 
@@ -171,24 +171,24 @@ namespace Pixel_Art_Tool
             //Validate input then call generate function
             if (ValidateInputs(out string projectFolder))
             {
-                switch(await new ImLib(blocks).Generate(TBInImage.Text, int.Parse(TBMaxHeight.Text), int.Parse(TBMaxWidth.Text), CBAllowUpscale.Checked,
+                switch(await new ImLib(ref blocks).Generate(TBInImage.Text, int.Parse(TBMaxHeight.Text), int.Parse(TBMaxWidth.Text), CBAllowUpscale.Checked,
                                                         projectFolder, CBSaveDownscaled.Checked, CBSavePixelated.Checked, CBSaveFiltered.Checked,
                                                         CBSaveFilteredPixelated.Checked))
                 {
                     case ImLib.ImLibResult.Succeed:
                         if (CBOpenDirWhenDone.Checked)
                         {
-                            Process.Start(TBOutDir.Text);
+                            Process.Start(projectFolder);
                         }
                         break;
                     case ImLib.ImLibResult.TooLarge:
                         MessageBox.Show("Error: Image too large. ");
                         break;
                     case ImLib.ImLibResult.ReadError:
-                        MessageBox.Show("Could not read source image. ");
+                        MessageBox.Show("Error: Could not read source image. ");
                         break;
                     case ImLib.ImLibResult.WriteError:
-                        MessageBox.Show("Could not write to project folder. ");
+                        MessageBox.Show("Error: Could not write to project folder. ");
                         break;
                 }
             }
@@ -231,7 +231,7 @@ namespace Pixel_Art_Tool
                 catch (Exception err) when (err is IOException || err is UnauthorizedAccessException)
                 {
                     //Couldn't save file, notify the user
-                    MessageBox.Show("Failed to save full index, error message: " + err.Message);
+                    MessageBox.Show("Error: Failed to save full index, error message: " + Environment.NewLine + err.Message);
                 }
             }
         }

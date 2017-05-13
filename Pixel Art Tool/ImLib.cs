@@ -1,37 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
 
 namespace Pixel_Art_Tool
 {
     /// <summary>
-    /// Image manipulation library
+    /// Image processing library
     /// </summary>
     class ImLib
     {
         /// <summary>
-        /// The available blocks
+        /// The current Block database
         /// </summary>
-        FormMain.Block[] blocks;
+        private FormMain.Block[] blocks;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="blocks">Current database</param>
-        public ImLib(FormMain.Block[] blocks)
+        public ImLib(ref FormMain.Block[] blocks)
         {
             this.blocks = blocks;
         }
 
         public async Task<ImLibResult> Generate(string imagePath, int maxHeight, int maxWidth, bool allowUpscale, string projectFolder,
-                                                bool saveDownscale, bool savePixelated, bool saveFiltered, bool saveFilteredPixelated)
+                                                bool saveDownscaled, bool savePixelated, bool saveFiltered, bool saveFilteredPixelated)
         {
             return await Task.Run(() =>
             {
@@ -39,6 +35,7 @@ namespace Pixel_Art_Tool
                 Bitmap scaledImage;
                 try
                 {
+                    //Read the input file
                     using (Image imgFromFile = Image.FromFile(imagePath))
                     {
                         //Check if origonal image is too small
@@ -63,6 +60,9 @@ namespace Pixel_Art_Tool
                         {
                             return result;
                         }
+                        //Test if this image is too large
+                        tempImage = new Bitmap(scaledImage.Width * 50, scaledImage.Height * 50);
+                        tempImage.Dispose();
                     }
                 }
                 catch (Exception err) when (err is OutOfMemoryException || err is ArgumentException)
@@ -76,7 +76,7 @@ namespace Pixel_Art_Tool
                     return ImLibResult.ReadError;
                 }
                 //=====Save the downscaled image=====
-                if (saveDownscale)
+                if (saveDownscaled)
                 {
                     try
                     {
@@ -147,7 +147,7 @@ namespace Pixel_Art_Tool
                 {
                     try
                     {
-                        filteredImage.Save(Path.Combine(projectFolder, "Trovized Downscaled.png"), ImageFormat.Png);
+                        filteredImage.Save(Path.Combine(projectFolder, "Filtered Downscaled.png"), ImageFormat.Png);
                     }
                     catch (System.Runtime.InteropServices.ExternalException)
                     {
@@ -161,7 +161,7 @@ namespace Pixel_Art_Tool
                     {
                         try
                         {
-                            pixelatedImage.Save(Path.Combine(projectFolder, "Trovized Pixelated.png"), ImageFormat.Png);
+                            pixelatedImage.Save(Path.Combine(projectFolder, "Filtered Pixelated.png"), ImageFormat.Png);
                             pixelatedImage.Dispose();
                         }
                         catch (System.Runtime.InteropServices.ExternalException)
