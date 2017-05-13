@@ -5,7 +5,7 @@ This is a tool that generates pixel art construction plans, download links can b
 This tool needs 2GB of RAM to perform calculations, and cannot generate plans that has raw size larger than 2GB. 
 
 Currently, there is only one blocks database, if you can provide others (for Trove or other relevant games), 
-please open an issue and let me know. 
+please let me know. 
 
 This software is built with Visual Studio 2017. 
 
