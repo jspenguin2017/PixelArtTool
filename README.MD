@@ -2,6 +2,8 @@
 
 This is a tool that generates pixel art construction plans, download links can be found in releases. 
 
+This tool needs 2GB of RAM to perform calculations, and cannot generate plans that has raw size larger than 2GB. 
+
 This software is built with Visual Studio 2017. 
 
 Please open an issue if there is something you want me to know. 
