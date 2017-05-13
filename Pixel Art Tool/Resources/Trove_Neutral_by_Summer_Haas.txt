@@ -1,0 +1,108 @@
+Primal Red	163	41	41
+Primal Orange	255	155	26
+Primal Yellow	255	222	2
+Primal Green	0	134	0
+Primal Blue	49	76	193
+Primal Purple	78	50	132
+Primal Gray	143	143	143
+Midnight Blue	0	23	59
+Dark Blue	10	61	136
+Business Blue	99	152	233
+Light Blue	208	232	255
+Blue Blue	25	111	255
+Laser Blue	17	224	255
+Moar Blue	0	57	255
+Boiled Denim	66	79	100
+Dark Brown	44	32	16
+Still Pretty Dark Brown	77	60	37
+Sepiagram	191	169	139
+Also Brown	54	44	25
+Hazel-Ish	108	100	77
+Dark Chocolate	35	30	23
+Cardboard Box	206	179	148
+Khaki Pants	168	140	85
+Brown Town	111	85	44
+Dark Green	34	59	0
+Lime Green	138	198	51
+Slime Green	177	233	99
+Light Green	244	255	208
+Electric Green	255	220	0
+Super Green	0	255	6
+Green-Er	0	145	3
+Pine Green	0	89	46
+Army Man	77	104	58
+Radioactive Green	177	255	0
+Mossy Green	116	136	31
+Charcoal	45	45	45
+Dark Grey	86	86	86
+Regular Old Gray	172	172	172
+Light Grey	240	239	239
+Umber Orange	160	88	12
+Festive Orange	251	174	93
+Peachy	246	227	197
+Burnt Orange	87	45	0
+Construction Orange	232	120	0
+Orange Creamsicle	255	211	123
+Pumpkin Orange	155	183	0
+Redish Orange	251	96	47
+Orange Sherbet	252	210	160
+Spray Tan	211	160	100
+Ominous Purple	24	3	65
+Dark Purple	56	12	143
+Violet	144	97	238
+Lilac	228	209	255
+Vibrant Purple	164	0	255
+8-Bit Grape	101	0	195
+Pastel Purple	187	111	222
+Severe Periwinkle	82	0	255
+Magenta Magic	140	0	156
+Dark Red	63	5	6
+Cadminum Red	138	16	19
+Salmon Red	233	102	106
+Pink	255	209	211
+Grandma's Lipstick	134	72	72
+Rosy Pink	255	79	79
+Pretty Pink	252	120	255
+Registroxel	240	0	255
+Darker Yellow	59	51	0
+Dark Yellow	137	120	10
+Buttercup Yellow	199	178	51
+Pale Yellow	255	255	208
+Yellowy Orange	255	183	0
+Yellow Mustard	255	220	0
+Fast Food Yellow	255	255	2
+Electric Lime	218	250	0
+Honey Mustard	255	214	98
+White	243	247	250
+Gold	255	230	80
+Cornerstone Foundation	65	53	59
+Verdant Green	87	184	21
+Metal Blue Jeans	68	119	164
+Blue Steel	19	174	208
+Mechanic Blue	43	51	55
+Auto Body Blue	37	54	177
+Deep Blue Sea	5	15	77
+Metallic Brown	153	134	123
+Metallic Grey-Blue	140	142	158
+Metallic Purple	110	62	169
+Polished Purple	139	42	159
+Polished Periwinkle	47	46	123
+Metal Magenta	70	5	77
+Midnight Metal	1	64	62
+Metallic Red	154	99	99
+Red Rust	170	62	62
+Rusty Rouge	77	5	5
+Metallic Pink	210	57	171
+Metallic Dark Pink	198	36	109
+Metallic Dark Orange	124	92	0
+Metallic Green	140	160	126
+Shiny Green	63	126	55
+Glistening Moss	150	187	16
+Metal Camouflage	100	106	76
+Pewter Pine	1	64	1
+Metallic Rust Orange	177	145	77
+Metallic Yellow	238	216	80
+Metallic Mustard	193	174	52
+Metallic White	255	255	255
+Silver	196	205	208
+Black Iron	14	14	14
