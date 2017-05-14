@@ -2,7 +2,8 @@
 
 This is a tool that generates pixel art construction plans, download links can be found in releases. 
 
-This tool needs up to 2GB of RAM to perform calculations, and cannot process plans that require more than 2GB of RAM. 
+This tool needs a large amount of RAM to perform calculations, but it cannot process plans that has raw size of more than 2GB. 
+Please have at least 4GB of available RAM before trying to create large construction plans. 
 
 Currently, there is only one blocks database, if you can provide others (for Trove or other relevant games), 
 please let me know. 

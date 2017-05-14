@@ -52,7 +52,7 @@
             this.CBSaveFilteredPixelated = new System.Windows.Forms.CheckBox();
             this.CBSaveFiltered = new System.Windows.Forms.CheckBox();
             this.CBSavePixelated = new System.Windows.Forms.CheckBox();
-            this.CBSaveDownscaled = new System.Windows.Forms.CheckBox();
+            this.CBSaveScaled = new System.Windows.Forms.CheckBox();
             this.DialogFileSave = new System.Windows.Forms.SaveFileDialog();
             this.TBMaxWidth = new System.Windows.Forms.TextBox();
             this.LabelMaxWidth = new System.Windows.Forms.Label();
@@ -199,7 +199,7 @@
             this.GBOptions.Controls.Add(this.CBSaveFilteredPixelated);
             this.GBOptions.Controls.Add(this.CBSaveFiltered);
             this.GBOptions.Controls.Add(this.CBSavePixelated);
-            this.GBOptions.Controls.Add(this.CBSaveDownscaled);
+            this.GBOptions.Controls.Add(this.CBSaveScaled);
             this.GBOptions.Location = new System.Drawing.Point(14, 160);
             this.GBOptions.Name = "GBOptions";
             this.GBOptions.Size = new System.Drawing.Size(285, 221);
@@ -279,15 +279,15 @@
             this.CBSavePixelated.Text = "Save pixelated image";
             this.CBSavePixelated.UseVisualStyleBackColor = true;
             // 
-            // CBSaveDownscaled
+            // CBSaveScaled
             // 
-            this.CBSaveDownscaled.AutoSize = true;
-            this.CBSaveDownscaled.Location = new System.Drawing.Point(6, 42);
-            this.CBSaveDownscaled.Name = "CBSaveDownscaled";
-            this.CBSaveDownscaled.Size = new System.Drawing.Size(142, 17);
-            this.CBSaveDownscaled.TabIndex = 10;
-            this.CBSaveDownscaled.Text = "Save downscaled image";
-            this.CBSaveDownscaled.UseVisualStyleBackColor = true;
+            this.CBSaveScaled.AutoSize = true;
+            this.CBSaveScaled.Location = new System.Drawing.Point(6, 42);
+            this.CBSaveScaled.Name = "CBSaveScaled";
+            this.CBSaveScaled.Size = new System.Drawing.Size(116, 17);
+            this.CBSaveScaled.TabIndex = 10;
+            this.CBSaveScaled.Text = "Save scaled image";
+            this.CBSaveScaled.UseVisualStyleBackColor = true;
             // 
             // TBMaxWidth
             // 
@@ -388,7 +388,7 @@
         private System.Windows.Forms.GroupBox GBOptions;
         private System.Windows.Forms.CheckBox CBSaveFilteredPixelated;
         private System.Windows.Forms.CheckBox CBSavePixelated;
-        private System.Windows.Forms.CheckBox CBSaveDownscaled;
+        private System.Windows.Forms.CheckBox CBSaveScaled;
         private System.Windows.Forms.CheckBox CBOpenDirWhenDone;
         private System.Windows.Forms.SaveFileDialog DialogFileSave;
         private System.Windows.Forms.CheckBox CBSaveFiltered;

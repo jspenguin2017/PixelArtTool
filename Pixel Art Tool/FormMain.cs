@@ -172,7 +172,7 @@ namespace Pixel_Art_Tool
             if (ValidateInputs(out string projectFolder))
             {
                 switch(await new ImLib(ref blocks).Generate(TBInImage.Text, int.Parse(TBMaxHeight.Text), int.Parse(TBMaxWidth.Text), CBAllowUpscale.Checked,
-                                                        projectFolder, CBSaveDownscaled.Checked, CBSavePixelated.Checked, CBSaveFiltered.Checked,
+                                                        projectFolder, CBSaveScaled.Checked, CBSavePixelated.Checked, CBSaveFiltered.Checked,
                                                         CBSaveFilteredPixelated.Checked))
                 {
                     case ImLib.ImLibResult.Succeed:
@@ -182,7 +182,7 @@ namespace Pixel_Art_Tool
                         }
                         break;
                     case ImLib.ImLibResult.TooLarge:
-                        MessageBox.Show("Error: Image too large. ");
+                        MessageBox.Show("Error: Could not allocate RAM, the target construction plan could be too large. ");
                         break;
                     case ImLib.ImLibResult.ReadError:
                         MessageBox.Show("Error: Could not read source image. ");
@@ -247,7 +247,7 @@ namespace Pixel_Art_Tool
             TBMaxHeight.Text = "150";
             TBMaxWidth.Text = "999999";
             CBAllowUpscale.Checked = false;
-            CBSaveDownscaled.Checked = false;
+            CBSaveScaled.Checked = false;
             CBSavePixelated.Checked = false;
             CBSaveFiltered.Checked = false;
             CBSaveFilteredPixelated.Checked = true;

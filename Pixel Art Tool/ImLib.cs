@@ -20,14 +20,27 @@ namespace Pixel_Art_Tool
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="blocks">Current database</param>
+        /// <param name="blocks">Current Block database</param>
         public ImLib(ref FormMain.Block[] blocks)
         {
             this.blocks = blocks;
         }
 
+        /// <summary>
+        /// Generate pixel art construction plan
+        /// </summary>
+        /// <param name="imagePath">Path of input image</param>
+        /// <param name="maxHeight">Max height</param>
+        /// <param name="maxWidth">Max width</param>
+        /// <param name="allowUpscale">Whether the image should be upscaled if it too small</param>
+        /// <param name="projectFolder">The output folder</param>
+        /// <param name="saveScaled">Whether scaled image should be saved</param>
+        /// <param name="savePixelated">Whether pixelated image should be saved</param>
+        /// <param name="saveFiltered">Whether filtered image should be saved</param>
+        /// <param name="saveFilteredPixelated">Whether filtered pixelated image should be saved</param>
+        /// <returns></returns>
         public async Task<ImLibResult> Generate(string imagePath, int maxHeight, int maxWidth, bool allowUpscale, string projectFolder,
-                                                bool saveDownscaled, bool savePixelated, bool saveFiltered, bool saveFilteredPixelated)
+                                                bool saveScaled, bool savePixelated, bool saveFiltered, bool saveFilteredPixelated)
         {
             return await Task.Run(() =>
             {
@@ -49,20 +62,22 @@ namespace Pixel_Art_Tool
                         }
                         //Scale image
                         ImLibResult result = ScaleImageWithInterpolation(imgFromFile, maxHeight, maxWidth, out Image tempImage);
-                        //Check if we succeed
-                        if (result == ImLibResult.Succeed)
+                        using (tempImage) //We want to make sure this gets disposed
                         {
-                            //Copy the image and carry on
-                            scaledImage = new Bitmap(tempImage); //This can throw, it will be catched below
-                            tempImage.Dispose(); //imgFromFile will be disposed by the using statement
+                            //Check if we succeed
+                            if (result == ImLibResult.Succeed)
+                            {
+                                //Copy the image and carry on
+                                scaledImage = new Bitmap(tempImage); //This can throw, but it will be catched below
+                                //Test if this image is too large
+                                Bitmap testImage = new Bitmap(scaledImage.Width * 50, scaledImage.Height * 50); //This will be catched below if it throws
+                                testImage.Dispose(); //imgFromFile will be disposed by the using statement
+                            }
+                            else
+                            {
+                                return result;
+                            }
                         }
-                        else
-                        {
-                            return result;
-                        }
-                        //Test if this image is too large
-                        tempImage = new Bitmap(scaledImage.Width * 50, scaledImage.Height * 50);
-                        tempImage.Dispose();
                     }
                 }
                 catch (Exception err) when (err is OutOfMemoryException || err is ArgumentException)
@@ -76,11 +91,11 @@ namespace Pixel_Art_Tool
                     return ImLibResult.ReadError;
                 }
                 //=====Save the downscaled image=====
-                if (saveDownscaled)
+                if (saveScaled)
                 {
                     try
                     {
-                        scaledImage.Save(Path.Combine(projectFolder, "Original Downscaled.png"), ImageFormat.Png);
+                        scaledImage.Save(Path.Combine(projectFolder, "Original Scaled.png"), ImageFormat.Png);
                     }
                     catch (System.Runtime.InteropServices.ExternalException)
                     {
@@ -92,28 +107,31 @@ namespace Pixel_Art_Tool
                 {
                     //Pixelate image
                     ImLibResult result = ScaleImageWithoutInterpolation(scaledImage, 10, out Bitmap pixelatedImage);
-                    //Check if we succeed then save
-                    if (result == ImLibResult.Succeed)
+                    using (pixelatedImage)
                     {
-                        try
+                        //Check if we succeed then save
+                        if (result == ImLibResult.Succeed)
                         {
-                            pixelatedImage.Save(Path.Combine(projectFolder, "Original Pixelated.png"), ImageFormat.Png);
-                            pixelatedImage.Dispose();
+                            try
+                            {
+                                pixelatedImage.Save(Path.Combine(projectFolder, "Original Pixelated.png"), ImageFormat.Png);
+                            }
+                            catch (System.Runtime.InteropServices.ExternalException)
+                            {
+                                return ImLibResult.WriteError;
+                            }
                         }
-                        catch (System.Runtime.InteropServices.ExternalException)
+                        else
                         {
-                            pixelatedImage.Dispose();
-                            return ImLibResult.WriteError;
+                            //No need for dispose in this case, since it is only one pixel, we can wait for garbage collector
+                            return result;
                         }
-                    }
-                    else
-                    {
-                        //No need for dispose in this case, since it is only one pixel, we can wait for garbage collector
-                        return result;
                     }
 
                 }
                 //=====Filter image=====
+                //Give scaledImage another name for clarity, it is assigned by reference, and scaledImage will be changed
+                //That is fine since the original scaledImage is not used later
                 Bitmap filteredImage = scaledImage;
                 //This matrix will store the index of the Block that is needed for each pixel, will be used later
                 int[,] constructionPlanMatrix = new int[filteredImage.Width, filteredImage.Height];
@@ -122,14 +140,14 @@ namespace Pixel_Art_Tool
                 {
                     for (int y = 0; y < filteredImage.Height; y++)
                     {
-                        //For each pixel, we need to find the closest color and save it
+                        //For each pixel, we need to find the closest color that is in the Block database and save it
                         int bestColorIndex = 0;
                         double currentDiff = double.MaxValue;
-                        //Color of current pixel
+                        //Get color of current pixel
                         Color currentPixelColor = filteredImage.GetPixel(x, y);
                         for (int i = 0; i < blocks.Count(); i++)
                         {
-                            //See if we have a closer color
+                            //Find the closest color
                             double cmpResult = ColorCmp(currentPixelColor, blocks[i].color);
                             if (cmpResult < currentDiff)
                             {
@@ -147,7 +165,7 @@ namespace Pixel_Art_Tool
                 {
                     try
                     {
-                        filteredImage.Save(Path.Combine(projectFolder, "Filtered Downscaled.png"), ImageFormat.Png);
+                        filteredImage.Save(Path.Combine(projectFolder, "Filtered Scaled.png"), ImageFormat.Png);
                     }
                     catch (System.Runtime.InteropServices.ExternalException)
                     {
@@ -157,17 +175,25 @@ namespace Pixel_Art_Tool
                 //=====Save filtered pixelated=====
                 if (saveFilteredPixelated)
                 {
+                    //Pixelate filtered image
                     ImLibResult result = ScaleImageWithoutInterpolation(filteredImage, 10, out Bitmap pixelatedImage);
+                    using (pixelatedImage)
                     {
-                        try
+                        //Check if we succeed then save
+                        if (result == ImLibResult.Succeed)
                         {
-                            pixelatedImage.Save(Path.Combine(projectFolder, "Filtered Pixelated.png"), ImageFormat.Png);
-                            pixelatedImage.Dispose();
+                            try
+                            {
+                                pixelatedImage.Save(Path.Combine(projectFolder, "Filtered Pixelated.png"), ImageFormat.Png);
+                            }
+                            catch (System.Runtime.InteropServices.ExternalException)
+                            {
+                                return ImLibResult.WriteError;
+                            }
                         }
-                        catch (System.Runtime.InteropServices.ExternalException)
+                        else
                         {
-                            pixelatedImage.Dispose();
-                            return ImLibResult.WriteError;
+                            return result;
                         }
                     }
                 }
@@ -184,65 +210,70 @@ namespace Pixel_Art_Tool
                 }
                 //Initialize the construction plan by scaling filtered image by 50 times
                 ImLibResult cpInitResult = ScaleImageWithoutInterpolation(filteredImage, 50, out Bitmap constructionPlanImage);
-                //Check if we succeed
-                if (cpInitResult == ImLibResult.Succeed)
+                using (constructionPlanImage)
                 {
-                    using (Graphics constructionPlanGraphics = Graphics.FromImage(constructionPlanImage))
+                    //Check if we succeed
+                    if (cpInitResult == ImLibResult.Succeed)
                     {
-                        //Draw grid
-                        using (Pen blackPen = new Pen(Color.Black, 2))
+                        using (Graphics constructionPlanGraphics = Graphics.FromImage(constructionPlanImage))
                         {
-                            //Vertical lines
-                            for (int x = 49; x < constructionPlanImage.Width - 5; x += 50)
+                            //Draw grid
+                            using (Pen blackPen = new Pen(Color.Black, 2))
                             {
-                                constructionPlanGraphics.DrawLine(blackPen, new Point(x, 0), new Point(x, constructionPlanImage.Height));
-                            }
-                            //Horizontal lines
-                            for (int y = 49; y < constructionPlanImage.Height - 5; y += 50)
-                            {
-                                constructionPlanGraphics.DrawLine(blackPen, new Point(0, y), new Point(constructionPlanImage.Width, y));
-                            }
-                        }
-                        //Draw index numbers
-                        using (Font consolasFont = new Font("Consolas", 24))
-                        {
-                            //The original y location to draw
-                            const int yDrawOriginal = 5;
-                            //Keep track of location to draw
-                            int xDraw = 1;
-                            int yDraw;
-                            //Loop through each pixel
-                            for (int x = 0; x < filteredImage.Width; x++)
-                            {
-                                //Reset y location
-                                yDraw = yDrawOriginal;
-                                for (int y = 0; y < filteredImage.Height; y++)
+                                //Vertical lines
+                                for (int x = 49; x < constructionPlanImage.Width - 5; x += 50)
                                 {
-                                    //Draw index
-                                    constructionPlanGraphics.DrawString(constructionPlanHex[x, y], consolasFont,
-                                                                        new SolidBrush(ContrastColor(filteredImage.GetPixel(x, y))),
-                                                                        xDraw, yDraw);
-                                    //Update location to draw
-                                    yDraw += 50;
+                                    constructionPlanGraphics.DrawLine(blackPen, new Point(x, 0), new Point(x, constructionPlanImage.Height));
                                 }
-                                //Update x location
-                                xDraw += 50;
+                                //Horizontal lines
+                                for (int y = 49; y < constructionPlanImage.Height - 5; y += 50)
+                                {
+                                    constructionPlanGraphics.DrawLine(blackPen, new Point(0, y), new Point(constructionPlanImage.Width, y));
+                                }
                             }
-                        }
-                        //Save image
-                        try
-                        {
-                            constructionPlanImage.Save(Path.Combine(projectFolder, "Construction Plan.png"), ImageFormat.Png);
-                        }
-                        catch (System.Runtime.InteropServices.ExternalException)
-                        {
-                            return ImLibResult.WriteError;
+                            //Draw index numbers
+                            using (Font consolasFont = new Font("Consolas", 24))
+                            {
+                                //The original y location to draw
+                                const int yDrawOriginal = 5;
+                                //Keep track of location to draw
+                                int xDraw = 1;
+                                int yDraw;
+                                //Loop through each pixel
+                                for (int x = 0; x < filteredImage.Width; x++)
+                                {
+                                    //Reset y location
+                                    yDraw = yDrawOriginal;
+                                    for (int y = 0; y < filteredImage.Height; y++)
+                                    {
+                                        //Draw index
+                                        constructionPlanGraphics.DrawString(constructionPlanHex[x, y], consolasFont,
+                                                                            new SolidBrush(ContrastColor(filteredImage.GetPixel(x, y))),
+                                                                            xDraw, yDraw);
+                                        //Update y location
+                                        yDraw += 50;
+                                    }
+                                    //Update x location
+                                    xDraw += 50;
+                                }
+                            }
+                            //Save image
+                            try
+                            {
+                                constructionPlanImage.Save(Path.Combine(projectFolder, "Construction Plan.png"), ImageFormat.Png);
+                            }
+                            catch (System.Runtime.InteropServices.ExternalException)
+                            {
+                                return ImLibResult.WriteError;
+                            }
+                            //We don't need it anymore
+                            constructionPlanHex = null;
                         }
                     }
-                }
-                else
-                {
-                    return cpInitResult;
+                    else
+                    {
+                        return cpInitResult;
+                    }
                 }
                 //=====Save used index with used times count=====
                 //Initialize counter
@@ -258,6 +289,8 @@ namespace Pixel_Art_Tool
                 //We are done with images, dispose
                 //Since filteredImage references scaledImage, we don't need to dispose both
                 filteredImage.Dispose();
+                //Delete this as well
+                constructionPlanMatrix = null;
                 //Prepare lines to write
                 string[] lines = new string[blocksCounter.Count(i => i != 0)];
                 //Since we are not outputting all the lines, we need a separate counter
@@ -272,6 +305,8 @@ namespace Pixel_Art_Tool
                         lines[linesIndex++] = ToTwoDigitHex(i) + " - " + blocks[i].name + "  (" + blocksCounter[i] + ")";
                     }
                 }
+                //We don't need it anymore
+                blocksCounter = null;
                 //Write to file
                 try
                 {
@@ -280,6 +315,10 @@ namespace Pixel_Art_Tool
                 catch (Exception err) when (err is PathTooLongException || err is IOException || err is UnauthorizedAccessException)
                 {
                     return ImLibResult.WriteError;
+                }
+                finally
+                {
+                    lines = null;
                 }
                 return ImLibResult.Succeed;
             });
