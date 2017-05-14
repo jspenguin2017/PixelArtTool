@@ -143,7 +143,7 @@
             // 
             // BtnGenerate
             // 
-            this.BtnGenerate.Font = new System.Drawing.Font("SimSun", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BtnGenerate.Font = new System.Drawing.Font("SimSun", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.BtnGenerate.Location = new System.Drawing.Point(305, 134);
             this.BtnGenerate.Name = "BtnGenerate";
             this.BtnGenerate.Size = new System.Drawing.Size(447, 141);
@@ -171,11 +171,12 @@
             // 
             // BtnSaveIndex
             // 
+            this.BtnSaveIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnSaveIndex.Location = new System.Drawing.Point(305, 281);
             this.BtnSaveIndex.Name = "BtnSaveIndex";
             this.BtnSaveIndex.Size = new System.Drawing.Size(447, 70);
             this.BtnSaveIndex.TabIndex = 17;
-            this.BtnSaveIndex.Text = "Save current database index as .txt file";
+            this.BtnSaveIndex.Text = "Save full index of current database";
             this.BtnSaveIndex.UseVisualStyleBackColor = true;
             this.BtnSaveIndex.Click += new System.EventHandler(this.BtnSaveIndex_Click);
             // 
