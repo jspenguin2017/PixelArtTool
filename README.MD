@@ -1,5 +1,7 @@
 # Pixel Art Tool
 
+![Main Window](http://i.imgur.com/TGBjXXp.png)
+
 This is a tool that generates pixel art construction plans, download links can be found in releases. 
 
 This tool needs a large amount of RAM to perform calculations, but it cannot process plans that has raw size of more than 2GB. 
