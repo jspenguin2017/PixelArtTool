@@ -1,6 +1,6 @@
 # Pixel Art Tool
 
-A tool that generates pixel art construction plans
+A pixel art construction plan generator
 
 ![Main Window](http://i.imgur.com/TGBjXXp.png)
 
